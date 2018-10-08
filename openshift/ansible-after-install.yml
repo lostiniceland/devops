@@ -1,0 +1,14 @@
+---
+- hosts: master
+  become: yes
+  tasks:
+  - name: Copy Openshift definitions
+    copy:
+      src: resources/persistent-volume.yml
+      dest: /home/vagrant/persistent-volume.yml
+  - name: Login as System-Admin
+      command: 'oc login -u system:admin'
+  - name: Create PV
+    command: 'oc create -f /home/vagrant/persistent-volume.yml'
+  name: Create Cluster Admin
+    command: 'oc adm policy add-cluster-role-to-user cluster-admin admin'

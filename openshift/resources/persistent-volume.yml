@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: nfs
+spec:
+  capacity:
+    storage: 15G
+  accessModes:
+    - ReadWriteOnce
+  nfs:
+    path: /var/nfs
+    server: domain.vnet.de
+  persistentVolumeReclaimPolicy: Recycle
+

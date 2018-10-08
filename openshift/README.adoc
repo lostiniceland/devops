@@ -1,0 +1,44 @@
+== Openshift Kubernetes Distribution OKD
+
+OKD is the fully fledged Kubernetes Distribution by RedHat, which by default secures many aspects in the
+Kubernetes cluster and provides additional features.
+
+The `openshift` folder contains a Vagrant environment which can host a fully functioning domain of several
+nodes:
+
+* domain.vnet.de
+** DNS-Server for the cluster
+** NFS-Server which can be added as persistent-volume to OKD
+* master.vnet.de
+** web-console available at https://openshift.vnet.de:8443
+** ETCD for cluster-configuration
+* infra.vnet.de - all OKD infrastructure-components will be installed here
+** Image Registry
+** Router
+** ...
+* app-1.vnet.de
+* app-2.vnet.de
+** Compute nodes for applications
+
+=== Prerequisites
+
+* Git
+* https://docs.okd.io/latest/cli_reference/get_started_cli.html#installing-the-cli[OC client]
+* https://linkerd.io/2/getting-started/[Linkerd client] (not yet used beside install-script)
+
+==== Install OKD
+
+Run `openshift/install.sh` which will create the environment and run the https://github.com/openshift/openshift-ansible[openshift-ansible installer]
+
+[source,sh]
+----
+include::openshift/install.sh[]
+----
+
+NOTE: the installer is always in flux, hence a at least known to work tag will be checked out.
+
+
+==== Use OKD
+
+* Run `vagrant up` from the openshift-folder (if the cluster is not already running)
+* Access https://openshift.vnet.de:8443

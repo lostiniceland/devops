@@ -1,0 +1,39 @@
+= Devops
+
+This module is intended to contain several deployment strategies for the produced images.
+
+== Prerequisites
+
+* KVM
+* Vagrant (with libvirt-plugin)
+
+`KVM` is used as Hypervisor because it is included in the Linux-Kernel. Futhermore `Vagrant` is used to
+easily setup and destroy an environment.
+
+All environments will provide an internal DNS to have full control over the domains in the subnet `vnet.de`, including wildcards.
+
+NOTE: The follwing setup was taken from this https://liquidat.wordpress.com/2017/03/03/howto-automated-dns-resolution-for-kvmlibvirt-guests-with-a-local-domain/[Blogpost]
+and all manual steps were converted into a `Vagrantfile`.
+
+In order to resolve DNS entries within the subnet `vnet.de` the local NetworkManager must be enhanced with an
+additional dnsmasq-instance and forward certain lookups into the subnet
+
+.enable dnsmasq in local NetworkManager
+[source, sh]
+----
+$ cat /etc/NetworkManager/conf.d/localdns.conf
+[main]
+dns=dnsmasq
+----
+
+.forward all lookups for *.vnet.de to the DNS inside the subnet
+[source, sh]
+----
+$ cat /etc/NetworkManager/dnsmasq.d/vnet.conf
+server=/vnet.de/192.168.60.100
+----
+
+
+TIP: when changing the network-settings in the Vagrantfile after a subnet has already been created, the existing
+KVM network must be deleted. Otherwise the changes wont be applied.
+

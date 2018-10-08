@@ -1,0 +1,14 @@
+---
+- hosts: all
+  become: yes
+  tasks:
+# Following for all, except domain
+  - name: Fix DNS-Resolution for internal services without 'cluster.local'
+    lineinfile:
+      path: /etc/dnsmasq.d/origin-upstream-dns.conf
+      # adjust network when using non-default cluster-network
+      line: 'server=/default.svc/172.30.0.1'
+    when: "'domain' not in inventory_hostname"
+  - name: Restart dnsmasq
+    service: name=dnsmasq state=restarted
+    when: "'domain' not in inventory_hostname"

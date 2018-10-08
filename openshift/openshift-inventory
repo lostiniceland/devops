@@ -1,0 +1,41 @@
+# Create an OSEv3 group that contains the masters, nodes, and etcd groups
+[OSEv3:children]
+masters
+nodes
+etcd
+
+# Set variables common for all OSEv3 hosts
+[OSEv3:vars]
+# SSH user, this user should allow ssh based auth without requiring a password
+ansible_ssh_user=vagrant
+
+# If ansible_ssh_user is not root, ansible_become must be set to true
+ansible_become=true
+
+openshift_deployment_type=origin
+openshift_release=v3.10
+openshift_master_cluster_public_hostname=openshift.vnet.de
+openshift_master_default_subdomain=apps.vnet.de
+
+
+# uncomment the following to enable htpasswd authentication; defaults to AllowAllPasswordIdentityProvider
+#openshift_master_identity_providers=[{'name': 'htpasswd_auth', 'login': 'true', 'challenge': 'true', 'kind': 'HTPasswdPasswordIdentityProvider'}]
+
+openshift_disable_check=memory_availability,disk_availability,docker_storage, docker_storage_driver
+
+
+# host group for masters
+[masters]
+master openshift_public_ip=192.168.60.150 ip=192.168.60.150
+
+# host group for etcd
+[etcd]
+master etcd_ip=192.168.60.150 ip=192.168.60.150
+
+
+# host group for nodes, includes region info
+[nodes]
+master openshift_node_group_name='node-config-master' openshift_public_ip=192.168.60.150 ip=192.168.60.150
+infra openshift_node_group_name='node-config-infra' openshift_public_ip=192.168.60.160 ip=192.168.60.160
+app1 openshift_node_group_name='node-config-compute' openshift_public_ip=192.168.60.170 ip=192.168.60.170
+app2 openshift_node_group_name='node-config-compute' openshift_public_ip=192.168.60.171 ip=192.168.60.171

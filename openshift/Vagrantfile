@@ -1,0 +1,58 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+ 
+VAGRANTFILE_API_VERSION = "2"
+ 
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+  # General Vagrant VM configuration.
+  config.vm.box = "centos/7"
+  config.vm.synced_folder ".", "/vagrant", disabled: true
+  config.vm.provider :libvirt do |libvirt|
+     libvirt.memory = 4096
+  end
+  
+
+  # Domain
+  config.vm.define "domain" do |node|
+    node.vm.hostname = "domain.vnet.de"
+    node.vm.network :private_network, :libvirt__domain_name => "vnet.de", :libvirt__dhcp_enabled => false, :libvirt__network_name => "vnet.de", ip: "192.168.60.100"
+    node.vm.provider :libvirt do |libvirt|
+     libvirt.memory = 256
+     libvirt.storage :file, :size => '20G', :cache => 'writeback', :allow_existing => true
+    end
+  end
+  
+  # Master.
+  config.vm.define "master" do |node|
+    node.vm.hostname = "master.vnet.de"
+    node.vm.network :private_network, :libvirt__domain_name => "vnet.de", :libvirt__dhcp_enabled => false, :libvirt__network_name => "vnet.de", ip: "192.168.60.150"
+    node.vm.provider :libvirt do |libvirt|
+     # Master needs more CPUs because it is also running ETCD
+     libvirt.cpus = 2
+    end
+  end
+  
+
+  # Infrastructure
+  config.vm.define "infra" do |infra|
+    infra.vm.hostname = "infra.vnet.de"
+    infra.vm.network :private_network, :libvirt__domain_name => "vnet.de", :libvirt__dhcp_enabled => false, :libvirt__network_name => "vnet.de", ip: "192.168.60.160"
+  end
+
+  # Applications 1
+  config.vm.define "app1" do |app1|
+    app1.vm.hostname = "app-1.vnet.de"
+    app1.vm.network :private_network, :libvirt__domain_name => "vnet.de", :libvirt__dhcp_enabled => false, :libvirt__network_name => "vnet.de", ip: "192.168.60.170"
+  end
+  
+  # Applications 2
+  config.vm.define "app2" do |app2|
+    app2.vm.hostname = "app-2.vnet.de"
+    app2.vm.network :private_network, :libvirt__domain_name => "vnet.de", :libvirt__dhcp_enabled => false, :libvirt__network_name => "vnet.de", ip: "192.168.60.171"
+  end
+  
+  config.vm.provision "ansible" do |ansible|
+    ansible.playbook = "ansible.yml"
+  end
+  
+end
