@@ -7,7 +7,7 @@
     lineinfile:
       path: /etc/dnsmasq.d/origin-upstream-dns.conf
       # adjust network when using non-default cluster-network
-      line: 'server=/default.svc/172.30.0.1'
+      line: 'server=/svc/172.30.0.1'
     when: "'domain' not in inventory_hostname"
   - name: Restart dnsmasq
     service: name=dnsmasq state=restarted

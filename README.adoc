@@ -7,6 +7,8 @@ This module is intended to contain several deployment strategies for the produce
 * KVM
 * Vagrant (with libvirt-plugin)
 
+TIP: make sure to add your user to the group `libvirt` or you will need to provide your root-password for each interaction of Vagrant with KVM/libvirt.
+
 `KVM` is used as Hypervisor because it is included in the Linux-Kernel. Futhermore `Vagrant` is used to
 easily setup and destroy an environment.
 

@@ -59,7 +59,8 @@ then
     echo -e "${INFO}Checkount openshift-ansible git-repository${NC}"
     git clone https://github.com/openshift/openshift-ansible.git
   fi
-  cd openshift-ansible && git checkout openshift-ansible-3.10.49-1 && cd ..
+  cd openshift-ansible && git checkout openshift-ansible-3.10.53-1 && cd ..
+  # cd openshift-ansible && git checkout openshift-ansible-3.10.49-1 && cd ..
   ansible-playbook openshift-ansible/playbooks/prerequisites.yml -i openshift-inventory
   ansible-playbook openshift-ansible/playbooks/deploy_cluster.yml -i openshift-inventory
   # Fix broken DNS
