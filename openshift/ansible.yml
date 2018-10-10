@@ -73,9 +73,7 @@
     shell: nmcli c modify "System eth1" ipv4.gateway "192.168.60.1" ipv4.dns "192.168.60.100" ipv4.dns-search "vnet.de"
     when: "'domain' not in inventory_hostname"
   - name: change hosts
-    copy:
-      src: resources/hosts
-      dest: /etc/hosts
+    command: echo 127.0.0.1 localhost > /etc/hosts
     when: "'domain' not in inventory_hostname"
   - name: Restart NetworkManager
     service: name=network state=restarted
