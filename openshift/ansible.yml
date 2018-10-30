@@ -14,8 +14,8 @@
         - net-tools
         - nmap
         - nc
-  - name: Upgrade all packages
-    yum: name=* state=latest
+#  - name: Upgrade all packages
+#    yum: name=* state=latest
   - name: Ensure NTPD is running.
     service: name=ntpd state=started enabled=yes
 # Following only on domain
