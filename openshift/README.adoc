@@ -28,6 +28,13 @@ nodes:
 
 ==== Install OKD
 
+WARNING: right now, there is an error in the DNS with the DNS-setup, which has been reported multiple times but not fixed yet.
+Once you see this message `TASK [openshift_service_catalog : Verify that the catalog api server is running]`
+the task will probably stall after some network activity. In this case run 'ansible-playbook -i openshift-inventory fix.yml' which will workaround the DNS issue
+for service-resolution within the cluster. After a couple seconds, the installer should continue.
+
+
+
 Run `openshift/install.sh` which will create the environment and run the https://github.com/openshift/openshift-ansible[openshift-ansible installer]
 
 [source,sh]

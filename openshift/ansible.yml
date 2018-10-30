@@ -14,8 +14,8 @@
         - net-tools
         - nmap
         - nc
-#  - name: Upgrade all packages
-#    yum: name=* state=latest
+  - name: Upgrade all packages
+    yum: name=* state=latest
   - name: Ensure NTPD is running.
     service: name=ntpd state=started enabled=yes
 # Following only on domain
@@ -73,10 +73,13 @@
     shell: nmcli c modify "System eth1" ipv4.gateway "192.168.60.1" ipv4.dns "192.168.60.100" ipv4.dns-search "vnet.de"
     when: "'domain' not in inventory_hostname"
   - name: change hosts
-    command: echo 127.0.0.1 localhost > /etc/hosts
+    copy:
+      src: resources/etc-hosts
+      dest: /etc/hosts
     when: "'domain' not in inventory_hostname"
   - name: Restart NetworkManager
     service: name=network state=restarted
     when: "'domain' not in inventory_hostname"
   - name: Allow SELinux to write to remote NFS
     shell: 'setsebool -P virt_use_nfs 1'
+    when: "'domain' not in inventory_hostname"

@@ -33,6 +33,9 @@ function check_ssh {
 }
 
 
+echo -e "${INFO}Checking for Ansible version...${NC}"
+ansible --version | head -n 1 | grep 2.6
+
 echo -e "${INFO}Hypervisor starting and provisioning${NC}"
 vagrant up
 
@@ -50,6 +53,7 @@ then
   vagrant ssh-config > ~/.ssh/config-vnet
 fi
 
+
 # only install if Openshift is not installed
 if ! check_running
 then
@@ -59,24 +63,17 @@ then
     echo -e "${INFO}Checkount openshift-ansible git-repository${NC}"
     git clone https://github.com/openshift/openshift-ansible.git
   fi
-  cd openshift-ansible && git checkout openshift-ansible-3.10.53-1 && cd ..
-  # cd openshift-ansible && git checkout openshift-ansible-3.10.49-1 && cd ..
+  export CHECKOUT=release-3.11
+  echo -e "${INFO}Using Branch/Tag '${CHECKOUT}'${NC}"
+  cd openshift-ansible && git checkout ${CHECKOUT} && cd ..
+
+  echo -e "${INFO}Runnin OKD Prerequisites${NC}"
   ansible-playbook openshift-ansible/playbooks/prerequisites.yml -i openshift-inventory
+  echo -e "${INFO}Runnin OKD Installation${NC}"
   ansible-playbook openshift-ansible/playbooks/deploy_cluster.yml -i openshift-inventory
-  # Fix broken DNS
-  ansible-playbook fix.yml -i openshift-inventory
   # Run OC tasks as cluster-admin
   echo -e "${INFO}Running additional task with the OKD client${NC}"
   ansible-playbook ansible-after-install.yml -i openshift-inventory
-  # Linkerd 2
-  echo -e "${INFO}Installing Linkerd ServiceMesh${NC}"
-  oc login --username=admin --password=admin
-  linkerd check --pre
-  linkerd install | oc apply -f -
-  oc adm policy add-scc-to-user privileged -z linkerd-controller -n linkerd
-  oc adm policy add-scc-to-user privileged -z linkerd-prometheus -n linkerd
-  oc adm policy add-scc-to-user privileged -z default -n linkerd
-  linkerd check
 fi
 
 echo -e "${INFO}DONE${NC}"
