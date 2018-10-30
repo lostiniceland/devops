@@ -4,6 +4,7 @@ set -e
 
 NC='\033[0m'       # Text Reset
 INFO='\033[0;34m'  # Blue
+ERROR='\e[0;31m'    # Red
 
 
 function check_running { # FIXME curl not retying on vm boot (failing quick)...but on second attempt works
@@ -33,8 +34,13 @@ function check_ssh {
 }
 
 
-echo -e "${INFO}Checking for Ansible version...${NC}"
-ansible --version | head -n 1 | grep 2.6
+echo -e -n "${INFO}Checking for Ansible version...${NC}"
+if ansible --version | head -n 1 | grep -q 2.6
+then
+  echo -e "${INFO}OK${NC}"
+else
+  echo -e "${ERROR}FAILED Only Ansible 2.6 can be used with openshift-ansible${NC}"
+fi
 
 echo -e "${INFO}Hypervisor starting and provisioning${NC}"
 vagrant up
@@ -42,10 +48,6 @@ vagrant up
 if ! check_ssh
 then
   echo -e "${INFO}Setting up ssh-config for Vagrant${NC}"
-  if [ ! -f ~/.ssh/config ]
-  then
-     ~/.ssh/config
-  fi
   if ! grep -Fxq "Include config-vnet" ~/.ssh/config
   then
       echo "Include config-vnet" >> ~/.ssh/config
