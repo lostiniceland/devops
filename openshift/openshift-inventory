@@ -13,13 +13,13 @@ ansible_ssh_user=vagrant
 ansible_become=true
 
 openshift_deployment_type=origin
-openshift_release=v3.11.0
-#openshift_release=v3.10
+#openshift_release=v3.11.0
+openshift_release=v3.10
 openshift_master_cluster_public_hostname=openshift.vnet.de
 openshift_master_default_subdomain=apps.vnet.de
 
 
-openshift_additional_repos=[{'id': 'centos-okd-ci', 'name': 'centos-okd-ci', 'baseurl' : 'http://buildlogs.centos.org/centos/7/paas/x86_64/openshift-origin311/','gpgcheck' : '0', 'enabled' : '1'}]
+#openshift_additional_repos=[{'id': 'centos-okd-ci', 'name': 'centos-okd-ci', 'baseurl' : 'http://buildlogs.centos.org/centos/7/paas/x86_64/openshift-origin311/','gpgcheck' : '0', 'enabled' : '1'}]
 
 # uncomment the following to enable htpasswd authentication; defaults to AllowAllPasswordIdentityProvider
 #openshift_master_identity_providers=[{'name': 'htpasswd_auth', 'login': 'true', 'challenge': 'true', 'kind': 'HTPasswdPasswordIdentityProvider'}]

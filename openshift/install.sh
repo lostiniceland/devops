@@ -65,7 +65,8 @@ then
     echo -e "${INFO}Checkount openshift-ansible git-repository${NC}"
     git clone https://github.com/openshift/openshift-ansible.git
   fi
-  export CHECKOUT=release-3.11
+  #export CHECKOUT=release-3.11
+  export CHECKOUT=release-3.10
   echo -e "${INFO}Using Branch/Tag '${CHECKOUT}'${NC}"
   cd openshift-ansible && git checkout ${CHECKOUT} && cd ..
 
