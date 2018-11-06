@@ -18,6 +18,10 @@
     yum: name=* state=latest
   - name: Ensure NTPD is running.
     service: name=ntpd state=started enabled=yes
+  - name: change hosts
+      copy:
+        src: resources/etc-hosts
+        dest: /etc/hosts
 # Following only on domain
   - name: Install dnsmasq service.
     yum: name=dnsmasq state=present
@@ -71,11 +75,6 @@
 # Following for all, except domain
   - name: Add gateway to eth1
     shell: nmcli c modify "System eth1" ipv4.gateway "192.168.60.1" ipv4.dns "192.168.60.100" ipv4.dns-search "vnet.de"
-    when: "'domain' not in inventory_hostname"
-  - name: change hosts
-    copy:
-      src: resources/etc-hosts
-      dest: /etc/hosts
     when: "'domain' not in inventory_hostname"
   - name: Restart NetworkManager
     service: name=network state=restarted
