@@ -19,9 +19,9 @@
   - name: Ensure NTPD is running.
     service: name=ntpd state=started enabled=yes
   - name: change hosts
-      copy:
-        src: resources/etc-hosts
-        dest: /etc/hosts
+    copy:
+      src: resources/etc-hosts
+      dest: /etc/hosts
 # Following only on domain
   - name: Install dnsmasq service.
     yum: name=dnsmasq state=present
