@@ -66,11 +66,10 @@ then
     git clone https://github.com/openshift/openshift-ansible.git
   fi
   export CHECKOUT=release-3.11
-  #export CHECKOUT=release-3.10
   echo -e "${INFO}Using Branch/Tag '${CHECKOUT}'${NC}"
-  cd openshift-ansible && git checkout ${CHECKOUT} && cd ..
+  cd openshift-ansible && git pull && git checkout ${CHECKOUT} && cd ..
 
-  echo -e "${INFO}Runnin OKD Prerequisites${NC}"
+  echo -e "${INFO}Running OKD Prerequisites${NC}"
   ansible-playbook openshift-ansible/playbooks/prerequisites.yml -i openshift-inventory
   echo -e "${INFO}Runnin OKD Installation${NC}"
   ansible-playbook openshift-ansible/playbooks/deploy_cluster.yml -i openshift-inventory

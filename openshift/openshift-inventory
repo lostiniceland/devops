@@ -26,6 +26,14 @@ openshift_additional_repos=[{'id': 'centos-okd-ci', 'name': 'centos-okd-ci', 'ba
 
 openshift_disable_check=docker_image_availability,memory_availability,disk_availability,docker_storage, docker_storage_driver
 
+os_firewall_use_firewalld=True
+
+# not working due to httpd-tools on ansible-host
+# accessible via https://hawkular-metrics.{{openshift_master_default_subdomain}}/hawkular/metrics
+# openshift_metrics_install_metrics=true
+
+# see https://bugzilla.redhat.com/show_bug.cgi?id=1565896
+template_service_broker_selector={"role": "master"}
 
 # host group for masters
 [masters]
